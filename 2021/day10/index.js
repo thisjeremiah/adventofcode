@@ -16,10 +16,23 @@ function part1() {
 }
 
 const scores = {
+  // close
   ')': 3,
   ']': 57,
   '}': 1197,
   '>': 25137,
+  // open
+  '(': 1,
+  '[': 2,
+  '{': 3,
+  '<': 4,
+}
+
+const matches = {
+  '(': ')',
+  '[': ']',
+  '{': '}',
+  '<': '>',
 }
 
 function getScore(line) {
@@ -29,34 +42,16 @@ function getScore(line) {
       stack.push(char)
     } else {
       const open = stack.pop()
-      switch (open) {
-        case '{':
-          if (char !== '}') return scores[char]
-          break
-        case '(':
-          if (char !== ')') return scores[char]
-          break
-        case '[':
-          if (char !== ']') return scores[char]
-          break
-        case '<':
-          if (char !== '>') return scores[char]
-          break
+      if (char !== matches[open]) {
+        return scores[char]
       }
     }
   }
   return 0
 }
 
-const autoScores = {
-  '(': 1,
-  '[': 2,
-  '{': 3,
-  '<': 4,
-}
-
 // assumes matching brackets
-function getAutocompleteScore(line) {
+function autoCompleteScore(line) {
   const stack = []
   for (let char of line) {
     if (['{', '(', '[', '<'].includes(char)) {
@@ -69,7 +64,7 @@ function getAutocompleteScore(line) {
   let char
   while ((char = stack.pop())) {
     score *= 5
-    score += autoScores[char]
+    score += scores[char]
   }
   return score
 }
@@ -85,11 +80,11 @@ function part2() {
     }
   }
   let scores = []
-  for (let i = lines.length - 1; i >= 0; i--) {
+  for (let i = 0; i <= lines.length - 1; i++) {
     const line = lines[i]
-    const score = getAutocompleteScore(line)
+    const score = autoCompleteScore(line)
     if (score !== 0) {
-      scores.push(getAutocompleteScore(line))
+      scores.push(score)
     }
   }
   return scores.sort((a, b) => a - b)[(scores.length - 1) / 2]
