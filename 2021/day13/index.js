@@ -110,10 +110,10 @@ function part2() {
 
   const grid = Array(maxX)
     .fill()
-    .map(() => Array(maxY).fill(' '))
+    .map(() => Array(maxY).fill('.'))
 
   for (let coord of _coords) {
-    if (grid[coord[0]][coord[1]] === ' ') {
+    if (grid[coord[0]][coord[1]] === '.') {
       grid[coord[0]][coord[1]] = '█'
     }
   }
